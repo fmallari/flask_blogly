@@ -12,9 +12,9 @@ app.config['SQLALCHEMY_ECHO'] = True
 
 app.config['SECRET_KEY'] = 'blogly'
 
-app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
+# app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
-toolbar = DebugToolbarExtension(app)
+# toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
 db.create_all()
