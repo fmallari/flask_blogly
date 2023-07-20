@@ -14,7 +14,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.Text, nullable=False)
     last_name = db.Column(db.Text, nullable=False)
-    image_url = db.column(db.Text, nullable=False, default=DEFAULT_IMAGE_URL)
+    image_url = db.Column(db.Text, nullable=False, default=DEFAULT_IMAGE_URL)
 
     @property
     def full_name(self):
@@ -22,8 +22,7 @@ class User(db.Model):
 
         return f"{self.first_name} {self.last_name}"
 
-def connect_db(app):
-    """Set db for Flask app"""
 
+def connect_db(app):
     db.app = app
     db.init_app(app)

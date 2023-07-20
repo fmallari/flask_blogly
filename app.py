@@ -1,17 +1,20 @@
-f"""Blogly application."""
+# f"""Blogly application."""
 
 from flask import Flask, request, redirect, render_template
-# from flask_debugtoolbar import DebugToolbarExtension
+from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User
 
 app = Flask(__name__)
+app.app_context().push()
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blogly'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 
 app.config['SECRET_KEY'] = 'blogly'
 
-# toolbar = DebugToolbarExtension(app)
+app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
+
+toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
 db.create_all()
@@ -21,14 +24,22 @@ def root():
     """homepage redirects to list of users"""
     
     return redirect("/users")
+######################################################
 
 """User route"""
 
 @app.route('/users')
 def users_index():
+    """Show page with infor on all users"""
 
     users = User.query.order_by(User.last_name, User.first_name).all()
     return render_template('users/index.html', users=users)
+
+@app.route('/users/new', methods=["GET"])
+def users_new_form():
+    """Show form to create new user"""
+
+    return render_template('users/new.html')
 
 @app.route("/users/new", methods=["POST"])
 def users_new():
@@ -44,11 +55,11 @@ def users_new():
 
     return redirect("/users") 
 
-@app.route('/users/<int:user_id')
+@app.route('/users/<int:user_id>')
 def users_show(user_id):
     """page shoes info on user"""
 
-    user = user.query.get_or_404(user_id)
+    user = User.query.get_or_404(user_id)
     return render_template('users/show.html', user=user)
 
 @app.route('/users/<int:user_id>/edit')
